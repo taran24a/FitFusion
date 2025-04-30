@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Calendar and Streak Tracker Pro</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4a9b9c, #1c6293);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .month-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .weekday {
+            font-weight: bold;
+            padding: 10px 0;
+            color: #ffd700;
+            font-size: 14px;
+        }
+
+        .day {
+            padding: 12px 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            min-height: 45px;
+            position: relative;
+        }
+
+        .day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .day.active {
+            background: linear-gradient(135deg, #ffd700, #ffb400);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .day.today {
+            border: 2px solid #ffd700;
+            font-weight: bold;
+        }
+
+        .day.empty-day {
+            visibility: hidden;
+        }
+
+        .day-reminder {
+            font-size: 10px;
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            color: inherit;
+        }
+
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .controls input, .controls textarea {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            flex: 1;
+        }
+
+        /* Enhanced Dropdown Styles */
+        .controls select {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            padding-right: 32px;
+            transition: all 0.3s;
+        }
+
+        .controls select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .controls select:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .controls select option {
+            background: #1c6293;
+            color: white;
+            padding: 10px;
+        }
+
+        .controls input::placeholder, .controls textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .controls button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ffd700, #ffb400);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .workout-type {
+            font-size: 11px;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1c6293, #4a9b9c);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .save-btn {
+            background: #1dd1a1;
+            color: white;
+        }
+
+        /* Progress chart */
+        .progress-container {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .progress-title {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffb400);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+        }
+
+        /* Workout type indicators */
+        .type-indicator {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .type-cardio {
+            background: #ff6b6b;
+        }
+
+        .type-strength {
+            background: #48dbfb;
+        }
+
+        .type-yoga {
+            background: #1dd1a1;
+        }
+
+        .type-other {
+            background: #feca57;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #ffd700;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* History list */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .history-type {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .history-notes {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 10px;
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 600px) {
+            .controls {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .input-group {
+                flex: 1;
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .weekday {
+                font-size: 16px;
+                padding: 12px;
+            }
+            
+            .day {
+                padding: 15px;
+                font-size: 16px;
+                min-height: 60px;
+            }
+            
+            .day-reminder {
+                font-size: 12px;
+            }
+
+            .modal-actions {
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Calendar & Streak Tracker Pro</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="calendar">Calendar</div>
+            <div class="tab" data-tab="history">Workout History</div>
+            <div class="tab" data-tab="progress">Progress</div>
+        </div>
+        
+        <div class="tab-content active" id="calendar-tab">
+            <div class="month-header">
+                <button class="nav-button" id="prevMonth">&lt;</button>
+                <div class="month-title" id="monthYear">May 2023</div>
+                <button class="nav-button" id="nextMonth">&gt;</button>
+            </div>
+
+            <div class="calendar" id="calendar">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+            </div>
+
+            <div class="controls">
+                <div class="input-group">
+                    <input type="text" id="reminderInput" placeholder="Workout details...">
+                    <select id="workoutType">
+                        <option value="general">General</option>
+                        <option value="cardio">Cardio</option>
+                        <option value="strength">Strength</option>
+                        <option value="yoga">Yoga</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button onclick="setReminder()">Log Workout</button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="history-tab">
+            <h3>Your Workout History</h3>
+            <div class="history-list" id="historyList">
+                <!-- History items will be added here dynamically -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="progress-tab">
+            <h3>Monthly Progress</h3>
+            <div class="progress-container">
+                <div class="progress-title">Workout Completion</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% completed (0/0 workouts)</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-title">Workout Types</div>
+                <div class="progress-text" id="typeStats">No workout data yet</div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="currentStreak">0</div>
+                <div class="stat-label">Current Streak</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalWorkouts">0</div>
+                <div class="stat-label">Total Workouts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="longestStreak">0</div>
+                <div class="stat-label">Longest Streak</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="monthlyWorkouts">0</div>
+                <div class="stat-label">This Month</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Details Modal -->
+    <div class="modal" id="workoutModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h3 class="modal-title">Workout Details</h3>
+            <div id="modalDate"></div>
+            <div id="modalWorkoutType" class="workout-type"></div>
+            <div id="modalNotes"></div>
+            <textarea id="modalEditNotes" style="display: none; width: 100%; margin-top: 10px;" rows="4"></textarea>
+            <div class="modal-actions">
+                <button class="delete-btn" onclick="deleteWorkout()">Delete</button>
+                <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">Edit</button>
+                <button class="save-btn" id="saveBtn" style="display: none;" onclick="saveWorkout()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const calendarEl = document.getElementById('calendar');
+        const monthYearEl = document.getElementById('monthYear');
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+        const currentStreakEl = document.getElementById('currentStreak');
+        const totalWorkoutsEl = document.getElementById('totalWorkouts');
+        const longestStreakEl = document.getElementById('longestStreak');
+        const monthlyWorkoutsEl = document.getElementById('monthlyWorkouts');
+        const reminderInput = document.getElementById('reminderInput');
+        const workoutTypeSelect = document.getElementById('workoutType');
+        const workoutModal = document.getElementById('workoutModal');
+        const modalDateEl = document.getElementById('modalDate');
+        const modalWorkoutTypeEl = document.getElementById('modalWorkoutType');
+        const modalNotesEl = document.getElementById('modalNotes');
+        const modalEditNotes = document.getElementById('modalEditNotes');
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const historyList = document.getElementById('historyList');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const typeStats = document.getElementById('typeStats');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let workoutData = JSON.parse(localStorage.getItem('workoutData')) || {};
+        let longestStreak = parseInt(localStorage.getItem('longestStreak')) || 0;
+        let selectedWorkoutDate = null;
+        let selectedWorkoutKey = null;
+
+        // Initialize the app
+        function init() {
+            renderCalendar(currentMonth, currentYear);
+            updateStats();
+            updateHistoryList();
+            updateProgress();
+            
+            // Set up tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Render calendar for specific month and year
+        function renderCalendar(month, year) {
+            calendarEl.innerHTML = `
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+            `;
+            
+            monthYearEl.textContent = new Date(year, month).toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyEl = document.createElement('div');
+                emptyEl.classList.add('day', 'empty-day');
+                calendarEl.appendChild(emptyEl);
+            }
+
+            // Create day elements
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.classList.add('day');
+                dayEl.textContent = day;
+
+                const dateKey = `${year}-${month + 1}-${day}`;
+                const workoutInfo = workoutData[dateKey];
+
+                if (workoutInfo) {
+                    dayEl.classList.add('active');
+                    
+                    const reminderEl = document.createElement('div');
+                    reminderEl.classList.add('day-reminder');
+                    reminderEl.textContent = workoutInfo.notes ? 
+                        (workoutInfo.notes.length > 15 ? 
+                         workoutInfo.notes.substring(0, 15) + '...' : 
+                         workoutInfo.notes) : '';
+                    dayEl.appendChild(reminderEl);
+                    
+                    const typeEl = document.createElement('div');
+                    typeEl.classList.add('workout-type');
+                    typeEl.textContent = workoutInfo.type || 'general';
+                    dayEl.appendChild(typeEl);
+                    
+                    // Add type indicator dot
+                    const typeIndicator = document.createElement('div');
+                    typeIndicator.classList.add('type-indicator', `type-${workoutInfo.type || 'general'}`);
+                    dayEl.appendChild(typeIndicator);
+                }
+
+                // Highlight today
+                if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dayEl.classList.add('today');
+                }
+
+                dayEl.addEventListener('click', () => showWorkoutDetails(day, month, year));
+                calendarEl.appendChild(dayEl);
+            }
+        }
+
+        // Show workout details in modal
+        function showWorkoutDetails(day, month, year) {
+            selectedWorkoutKey = `${year}-${month + 1}-${day}`;
+            const workoutInfo = workoutData[selectedWorkoutKey];
+            
+            if (workoutInfo) {
+                selectedWorkoutDate = new Date(year, month, day);
+                modalDateEl.textContent = selectedWorkoutDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                
+                modalWorkoutTypeEl.textContent = `Workout Type: ${workoutInfo.type || 'general'}`;
+                modalNotesEl.textContent = workoutInfo.notes || 'No additional notes';
+                modalEditNotes.value = workoutInfo.notes || '';
+                
+                // Reset modal state
+                modalNotesEl.style.display = 'block';
+                modalEditNotes.style.display = 'none';
+                editBtn.style.display = 'block';
+                saveBtn.style.display = 'none';
+                
+                workoutModal.style.display = 'flex';
+            }
+        }
+
+        // Toggle edit mode in modal
+        function toggleEditMode() {
+            modalNotesEl.style.display = 'none';
+            modalEditNotes.style.display = 'block';
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'block';
+        }
+
+        // Save edited workout
+        function saveWorkout() {
+            if (selectedWorkoutKey && workoutData[selectedWorkoutKey]) {
+                workoutData[selectedWorkoutKey].notes = modalEditNotes.value.trim();
+                localStorage.setItem('workoutData', JSON.stringify(workoutData));
+                
+                // Update UI
+                modalNotesEl.textContent = modalEditNotes.value.trim() || 'No additional notes';
+                modalNotesEl.style.display = 'block';
+                modalEditNotes.style.display = 'none';
+                editBtn.style.display = 'block';
+                saveBtn.style.display = 'none';
+                
+                // Refresh calendar and history
+                renderCalendar(currentMonth, currentYear);
+                updateHistoryList();
+            }
+        }
+
+        // Delete workout
+        function deleteWorkout() {
+            if (selectedWorkoutKey && workoutData[selectedWorkoutKey]) {
+                if (confirm('Are you sure you want to delete this workout?')) {
+                    delete workoutData[selectedWorkoutKey];
+                    localStorage.setItem('workoutData', JSON.stringify(workoutData));
+                    closeModal();
+                    
+                    // Refresh UI
+                    renderCalendar(currentMonth, currentYear);
+                    updateStats();
+                    updateHistoryList();
+                    updateProgress();
+                }
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            workoutModal.style.display = 'none';
+        }
+
+        // Set workout reminder
+        function setReminder() {
+            const today = new Date();
+            const day = today.getDate();
+            const month = today.getMonth();
+            const year = today.getFullYear();
+            const dateKey = `${year}-${month + 1}-${day}`;
+            
+            const reminderText = reminderInput.value.trim();
+            const workoutType = workoutTypeSelect.value;
+
+            if (reminderText) {
+                workoutData[dateKey] = {
+                    notes: reminderText,
+                    type: workoutType,
+                    date: dateKey,
+                    timestamp: new Date().getTime()
+                };
+                
+                localStorage.setItem('workoutData', JSON.stringify(workoutData));
+                renderCalendar(currentMonth, currentYear);
+                updateStats();
+                updateHistoryList();
+                updateProgress();
+                reminderInput.value = '';
+            } else {
+                alert("Please enter workout details.");
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const dates = Object.keys(workoutData).sort();
+            let currentStreak = 0;
+            let longestCurrentStreak = 0;
+            let prevDate = null;
+            
+            // Calculate streaks
+            for (let i = 0; i < dates.length; i++) {
+                const currentDate = new Date(dates[i]);
+                if (prevDate) {
+                    const diffTime = currentDate - prevDate;
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                    
+                    if (diffDays === 1) {
+                        currentStreak++;
+                        longestCurrentStreak = Math.max(longestCurrentStreak, currentStreak);
+                    } else if (diffDays > 1) {
+                        currentStreak = 0;
+                    }
+                } else {
+                    currentStreak = 1;
+                    longestCurrentStreak = 1;
+                }
+                prevDate = currentDate;
+            }
+            
+            // Check if last workout was yesterday for current streak
+            if (dates.length > 0) {
+                const lastWorkoutDate = new Date(dates[dates.length - 1]);
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastWorkoutDate.toDateString() === today.toDateString()) {
+                    currentStreak = longestCurrentStreak;
+                } else if (lastWorkoutDate.toDateString() === yesterday.toDateString()) {
+                    currentStreak = 1;
+                } else {
+                    currentStreak = 0;
+                }
+            }
+            
+            // Update longest streak if needed
+            longestStreak = Math.max(longestStreak, longestCurrentStreak);
+            localStorage.setItem('longestStreak', longestStreak.toString());
+            
+            // Count monthly workouts
+            const currentMonthWorkouts = Object.keys(workoutData).filter(date => {
+                const d = new Date(date);
+                return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+            }).length;
+            
+            // Update UI
+            currentStreakEl.textContent = currentStreak;
+            totalWorkoutsEl.textContent = dates.length;
+            longestStreakEl.textContent = longestStreak;
+            monthlyWorkoutsEl.textContent = currentMonthWorkouts;
+        }
+
+        // Update workout history list
+        function updateHistoryList() {
+            historyList.innerHTML = '';
+            
+            // Sort workouts by date (newest first)
+            const sortedWorkouts = Object.entries(workoutData)
+                .sort((a, b) => new Date(b[0]) - new Date(a[0]));
+            
+            if (sortedWorkouts.length === 0) {
+                historyList.innerHTML = '<div style="padding: 20px; text-align: center;">No workouts logged yet</div>';
+                return;
+            }
+            
+            sortedWorkouts.forEach(([date, workout]) => {
+                const historyItem = document.createElement('div');
+                historyItem.classList.add('history-item');
+                
+                const dateParts = date.split('-');
+                const displayDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                
+                historyItem.innerHTML = `
+                    <div class="history-date">${displayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                    <div class="history-type">${workout.type || 'general'}</div>
+                    <div class="history-notes">${workout.notes || ''}</div>
+                `;
+                
+                historyItem.addEventListener('click', () => {
+                    const dateParts = date.split('-');
+                    showWorkoutDetails(parseInt(dateParts[2]), parseInt(dateParts[1]) - 1, parseInt(dateParts[0]));
+                });
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Update progress information
+        function updateProgress() {
+            // Monthly completion progress
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            const daysPassed = today.getDate();
+            const maxPossibleWorkouts = today.getMonth() === currentMonth && today.getFullYear() === currentYear ? daysPassed : daysInMonth;
+            
+            const monthlyWorkouts = Object.keys(workoutData).filter(date => {
+                const d = new Date(date);
+                return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+            }).length;
+            
+            const completionPercentage = maxPossibleWorkouts > 0 ? Math.round((monthlyWorkouts / maxPossibleWorkouts) * 100) : 0;
+            
+            progressFill.style.width = `${completionPercentage}%`;
+            progressText.textContent = `${completionPercentage}% completed (${monthlyWorkouts}/${maxPossibleWorkouts} days)`;
+            
+            // Workout type statistics
+            const typeCounts = {
+                general: 0,
+                cardio: 0,
+                strength: 0,
+                yoga: 0,
+                other: 0
+            };
+            
+            Object.values(workoutData).forEach(workout => {
+                typeCounts[workout.type || 'general']++;
+            });
+            
+            const totalWorkouts = Object.values(typeCounts).reduce((sum, count) => sum + count, 0);
+            
+            if (totalWorkouts > 0) {
+                typeStats.innerHTML = `
+                    <div>General: ${typeCounts.general} (${Math.round((typeCounts.general / totalWorkouts) * 100)}%)</div>
+                    <div>Cardio: ${typeCounts.cardio} (${Math.round((typeCounts.cardio / totalWorkouts) * 100)}%)</div>
+                    <div>Strength: ${typeCounts.strength} (${Math.round((typeCounts.strength / totalWorkouts) * 100)}%)</div>
+                    <div>Yoga: ${typeCounts.yoga} (${Math.round((typeCounts.yoga / totalWorkouts) * 100)}%)</div>
+                    <div>Other: ${typeCounts.other} (${Math.round((typeCounts.other / totalWorkouts) * 100)}%)</div>
+                `;
+            } else {
+                typeStats.textContent = 'No workout data yet';
+            }
+        }
+
+        // Event listeners for month navigation
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentMonth, currentYear);
+            updateProgress();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentMonth, currentYear);
+            updateProgress();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === workoutModal) {
+                closeModal();
+            }
+        });
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
