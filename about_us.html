@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | FitFusion</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f7f7f7;
+            margin: 0;
+        }
+
+        .menu-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000;
+            padding: 0 30px;
+            height: 80px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 90px;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-items li {
+            list-style: none;
+            color: #19dd32;
+            font-family: sans-serif;
+            font-weight: bold;
+            padding: 12px 16px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .menu-items li:hover {
+            color: #fff;
+        }
+
+        .menu-items a {
+            color: #19dd32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .about-section {
+            
+            text-align: center;
+            margin-top: 10px; /*Keep this to avoid overlap with fixed navbar */
+        }
+
+        .about-title {
+            font-size: 36px;
+            color: #19dd32;
+            margin-bottom: 20px;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-text {
+            max-width: 600px;
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .about-image img {
+            width: 400px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-title {
+                font-size: 28px;
+            }
+
+            .about-text {
+                font-size: 16px;
+            }
+
+            .about-image img {
+                width: 100%;
+                max-width: 500px; /* Makes the image responsive */
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="about-section">
+        <h1 class="about-title">About Us</h1>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Welcome to FitFusion! We are dedicated to helping individuals reach their fitness goals, live a healthy lifestyle, and stay motivated through every step of their journey. Our mission is to provide an accessible, engaging, and supportive platform for anyone looking to improve their physical and mental well-being.</p>
+                <p>At FitFusion, we believe fitness is not just a goal but a way of life. With our platform, you can track your workouts, monitor your progress, and join a community of like-minded fitness enthusiasts. Whether you are just beginning or are an experienced athlete, FitFusion is designed to make your fitness journey enjoyable and rewarding.</p>
+                <p>Join us today, and let’s work together towards a healthier, happier, and fitter you!</p>
+            </div>
+            <div class="about-image">
+                <img src="https://images.pexels.com/photos/1431283/pexels-photo-1431283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="About Us Image">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FitFusion. All rights reserved.</p>
+        <p>Chitkara University, Punjab</p>
+        <p>Email: support@fitfusion.com | Phone: +1 (234) 567-890</p>
+    </footer>
+</body>
+</html>
