@@ -1,0 +1,549 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #020410;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 5%;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+}
+.navbar a {
+    position: relative;
+    font-size: 20px;
+    color: #e4e4e4;
+    font-weight: 500;
+    margin-right: 40px;
+    text-decoration: none;
+}
+
+.navbar a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background: #e4e4e4;
+    border-radius: 5px;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: .5s;
+}
+
+.navbar a:hover::after {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+}
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #e4e4e4;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .header {
+        padding: 15px 5%;
+    }
+    
+    .navbar {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(2, 4, 16, 0.9);
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        transition: all 0.5s ease;
+    }
+    
+    .navbar.active {
+        left: 0;
+    }
+    
+    .navbar a {
+        margin: 15px 0;
+        font-size: 20px; /* Larger text for mobile */
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+    
+    .container {
+        width: 90%;
+        height: auto;
+        min-height: 500px;
+    }
+    
+    .container .content {
+        width: 100%;
+        padding: 40px;
+    }
+    
+    .container .logreg-box {
+        position: relative;
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+    }
+    
+    .form-box .input-box {
+        width: 100%;
+    }
+}
+
+.background {
+    width: 100%;
+    height: 100vh;
+
+        background: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg') no-repeat;
+        /* Remove ?w=360 or change to ?w=1920 */
+    
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    height: 550px;
+  
+    background: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg') no-repeat;
+    /* Remove ?w=360 or change to ?w=1920 */
+
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.container .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 58%;
+    height: 100%;
+    background-color: transparent;
+    padding: 80px;
+    color: #e4e4e4;
+    display: flex;
+    backdrop-filter: blur(0); /* Ensures text stays sharp */
+    text-shadow: 0 0 5px rgba(0,0,0,0.3); /* Improves readability */
+    z-index: 1; /* Places text above blurred background */
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.container .logo {
+    font-size: 30px;
+}
+
+.text-sci h2 {
+    font-size: 40px;
+    line-height: 1;
+}
+
+.text-sci h2 span {
+    font-size: 25px;
+}
+
+.text-sci p {
+    font-size: 16px;
+    margin: 20px 0;
+}
+
+.social-icons a i {
+    font-size: 22px;
+    color: #e4e4e4;
+    margin-right: 10px;
+    transition: .5s ease;
+}
+
+.social-icons a:hover i {
+    transform: scale(1.2);
+    color: #fff;
+}
+
+.container .logreg-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100% - 58%);
+    height: 100%;
+    overflow: hidden;
+}
+
+.logreg-box .form-box {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #e4e4e4;
+}
+.logreg-box .form-box.login {
+    transform: translateX(0);
+    transition: transform .6s ease;
+    transition-delay: .7s;
+
+}
+.logreg-box.active .form-box.login {
+    transform: translateX(430px);
+    transition-delay: 0s;
+}
+
+
+.logreg-box .form-box.register {
+    transform: translateX(430px);
+    transition: transform .6s ease;
+    transition-delay: 0s;
+
+}
+.logreg-box.active .form-box.register {
+    transform: translateX(0);
+    transition-delay: .7s;
+}
+
+.form-box h2 {
+    font-size: 32px;
+    text-align: center;
+}
+
+.form-box .input-box {
+    position: relative;
+    width: 340px;
+    height: 50px;
+    border-bottom: 2px solid #e4e4e4;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #e4e4e4;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s ease;
+    color: #e4e4e4;
+    padding-right: 28px;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+    left: 0;
+    font-size: 12px;
+}
+
+.input-box .icon {
+    position: absolute;
+    top: 13px;
+    right: 0;
+    font-size: 19px;
+}
+
+.form-box .remember-forgot {
+    font-size: 14.5px;
+    font-weight: 500;
+    margin: -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-forgot label input {
+    accent-color: #e4e4e4;
+    margin-left: 3px;
+}
+
+.remember-forgot a {
+    color: #e4e4e4;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background: #e4e4e4;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #020410;
+    font-weight: 500;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: .5s ease;
+}
+
+.form-box .login-register {
+    font-size: 14.5px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.login-register p a {
+    color: #e4e4e4;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-register p a:hover {
+    text-decoration: underline;
+}
+/* Add this to your existing CSS */
+
+/* Improved Mobile Responsiveness */
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        width: 100%;
+        border-radius: 0;
+        margin-top: 0;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+    }
+    
+    .container .content, 
+    .container .logreg-box {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+    
+    .container .content {
+        padding: 60px 20px 30px;
+    }
+    
+    .logreg-box {
+        padding: 30px 20px;
+    }
+    
+    .form-box {
+        width: 100% !important;
+        border-radius: 0 !important;
+        padding: 20px;
+    }
+    
+    .form-box .input-box {
+        width: 100% !important;
+        max-width: 100%;
+    }
+    
+    .background {
+        height: 100vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .container .content {
+        padding: 50px 15px 20px;
+    }
+    
+    .text-sci h2 {
+        font-size: 28px;
+        font-weight: 600;
+    }
+    
+    .text-sci h2 span {
+        font-size: 18px;
+    }
+    .text-sci p {
+        font-weight: 400;
+    }
+    
+    .form-box h2 {
+        font-size: 24px;
+    }
+    
+    .navbar a {
+        margin: 10px 0;
+        font-size: 18px;
+    }
+    
+    .btn {
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .input-box {
+        height: 45px;
+        margin: 20px 0 !important;
+    }
+}
+
+/* Fix for form box transitions on mobile */
+@media (max-width: 992px) {
+    .logreg-box .form-box.login,
+    .logreg-box .form-box.register {
+        transform: none !important;
+        position: relative;
+        transition: none !important;
+    }
+    
+    .logreg-box.active .form-box.login,
+    .logreg-box.active .form-box.register {
+        transform: none !important;
+    }
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+@media (max-width: 768px) {
+    .background, .container {
+        background-image: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg');
+    }
+}
+/* Improved Background Handling */
+.background, .container {
+    background-attachment: fixed;
+    transition: background-image 0.3s ease;
+}
+
+@media (max-width: 1200px) {
+    .background, .container {
+        background-image: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg?w=1200');
+    }
+}
+
+@media (max-width: 768px) {
+    .background, .container {
+        background-image: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg?w=800');
+        filter: blur(0); /* Less blur on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .background, .container {
+        background-image: url('https://img.freepik.com/premium-photo/muscular-attractive-caucasian-bearded-man-lifting-two-kettlebells-gym-weight-plates-dumbbell-tires-background_136403-4655.jpg?w=600');
+        filter: blur(0); /* Minimal blur on mobile */
+    }
+}
+
+/* Enhanced Text Responsiveness */
+.text-sci h2 {
+    font-size: clamp(28px, 5vw, 40px); /* Fluid typography */
+    line-height: 1.2;
+}
+
+.text-sci h2 span {
+    font-size: clamp(18px, 3vw, 25px);
+}
+
+.text-sci p {
+    font-size: clamp(14px, 2vw, 16px);
+    margin: 15px 0;
+}
+
+/* Improved Navigation Bar */
+@media (max-width: 992px) {
+    .header {
+        padding: 10px 5%;
+    }
+    
+    .navbar {
+        top: 60px;
+        height: calc(100vh - 60px);
+        background: rgba(2, 4, 16, 0.95); /* Slightly more opaque */
+        backdrop-filter: blur(5px);
+    }
+    
+    .navbar a {
+        padding: 12px 0;
+        margin: 10px 0;
+        font-size: clamp(18px, 4vw, 22px);
+    }
+    
+    .navbar a::after {
+        bottom: -3px;
+        height: 1.5px;
+    }
+}
+
+/* Better Mobile Menu Toggle */
+.menu-toggle {
+    padding: 5px;
+    z-index: 1100;
+    transition: transform 0.3s ease;
+}
+
+.menu-toggle.active {
+    transform: rotate(90deg);
+}
+
+/* Touch-friendly elements */
+.btn, .navbar a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn {
+    min-height: 44px; /* Minimum touch target size */
+}
+
+.navbar a {
+    padding: 5px 0; /* Better touch area */
+}
+
+/* Prevent layout shift on mobile */
+
+
+body {
+    position: relative;
+    overflow-x: hidden;
+}
