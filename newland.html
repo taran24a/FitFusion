@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>FitFusion</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon"> <!-- Favicon link -->
+    
+    <style>
+        /* Basic Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #e8ecef;
+            background-color: #0d3b4a;
+        }
+
+        /* Header and Navbar */
+        header {
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            width: 100%;
+            z-index: 10;
+        }
+
+        footer {
+            background-color: #0d3b4a;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            gap: 30px;
+        }
+
+        .logo {
+            color: #e8ecef;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px #000;
+        }
+        .nav-links {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #e8ecef;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #5596b3;
+            text-shadow: 1px 1px 6px rgba(20, 91, 157, 0.7);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #e8ecef;
+            margin: 4px 0;
+            border-radius: 2px;
+        }
+
+
+        /* Hero Section */
+        .section-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: x-large;
+            padding: 60px 20px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            color: #e8ecef;
+            min-height: 100vh;
+        }
+
+        /* 3D Animated Photo Reel */
+        .photo-reel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            padding: 20px 0;
+            margin-top: 20px;
+            background: #1465805a;
+            perspective: 1000px; /* Adds a 3D perspective */
+        }
+
+        .photo-reel-container {
+            display: flex;
+            animation: scroll 10s linear infinite; /* Continuous scrolling */
+        }
+
+        .photo {
+            min-width: 250px;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-right: 20px;
+            transform: rotateY(15deg); /* Creates 3D effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        /* Continuous Scroll Keyframes without gap */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 5 - 100px)); } /* Adjusted for seamless transition */
+        }
+        
+
+        
+        
+        /* Hover effect for individual photos */
+        .photo:hover {
+            transform: scale(1.1) rotateY(0deg); /* Emphasizes 3D pop */
+        }
+        .username {
+            font-size: large;
+            margin-top: 10px;
+        }
+
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                background-color: #13487d;
+                width: 100%;
+                top: 60px;
+                left: 0;
+                padding: 20px 0;
+                z-index: 1;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+               
+            }
+            .menu-toggle{
+                display: flex;
+                
+            }
+            .navbar {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                
+            }
+            .logo {
+                font-size: 22px;
+            }
+            .photo-reel{
+                overflow: auto;
+            }
+            .photo{
+                min-width: 200px;
+                height: 120px;
+                
+            }
+        }
+            
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">FIT FUSION</div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="workout.html">WORKOUT</a></li>
+                <li><a href="tutorial.html">TUTORIALS</a></li>
+                <li><a href="calendar.html">STATISTICS</a></li>
+                <li><a href="bmi.html">BMI</a></li>
+                <li><a href="meditation.html">MEDITATION</a></li>
+                
+            </ul>
+            
+        </nav>
+    </header>
+
+    <section id="home" class="section-header">
+        <h1>Welcome to Fit Fusion</h1>
+        <p>Your journey starts here.</p>
+        <div class="username" id="username-display"></div> <!-- Username display -->
+        
+        <!-- 3D Animated Photo Reel -->
+        <div class="photo-reel">
+            <div class="photo-reel-container">
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1552252/pexels-photo-1552252.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1954521/pexels-photo-1954521.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/3253497/pexels-photo-3253497.jpeg');"></div>
+                
+                <!-- Duplicate images for seamless loop -->
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1552252/pexels-photo-1552252.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/1954521/pexels-photo-1954521.jpeg');"></div>
+                <div class="photo" style="background-image: url('https://images.pexels.com/photos/3253497/pexels-photo-3253497.jpeg');"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FitFusion. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Display the username if available
+        window.onload = function() {
+            const username = localStorage.getItem('username');
+            const usernameDisplay = document.getElementById('username-display');
+
+            if (username) {
+                usernameDisplay.textContent = `Logged in as: ${username}`;
+            } else {
+                usernameDisplay.textContent = ''; // Hide if not logged in
+            }
+        };
+
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
