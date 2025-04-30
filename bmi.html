@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.png" type="image/x-icon"> <!-- Favicon link -->
+
+    <title>BMI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("https://www.trainerize.me/articles/wp-content/uploads/2020/10/p-402-felix-mg-8850.jpg"); 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-size: cover; 
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+
+        h1 {
+            color: #fdfdfd;
+            border: 2px solid #36a3f7; 
+            border-radius: 50px;
+            padding: 5px 20px; 
+            margin: 20px auto;
+            display: inline-block;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        form input {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3d3c3c;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .button {
+            padding: 12px;
+            background-color: #36a3f7;
+            border: none;
+            border-radius: 5px;
+            color: #121212;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #ffffff;
+        }
+        
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin: 0 auto;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <section class="calculate">
+        <div class="container">
+            <h1>CALCULATE YOUR BMI</h1>
+            <br>
+            <p class="description">
+                Calculates body mass index from your<br> height and weight
+            </p>
+            <form id="calculate-form">
+                <input type="number" placeholder="Height (cm)" id="calculate-cm" required>
+                <input type="number" placeholder="Weight (kg)" id="calculate-kg" required>
+                <button type="submit" class="button">Calculate Now!</button>
+            </form>
+            <div class="result" id="result"></div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('calculate-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const height = parseFloat(document.getElementById('calculate-cm').value) / 100; // convert cm to meters
+            const weight = parseFloat(document.getElementById('calculate-kg').value);
+            const bmi = (weight / (height * height)).toFixed(2); // calculate BMI
+
+            let category;
+            if (bmi < 18.5) {
+                category = 'Underweight';
+            } else if (bmi < 24.9) {
+                category = 'Normal weight';
+            } else if (bmi < 29.9) {
+                category = 'Overweight';
+            } else {
+                category = 'Obesity';
+            }
+
+            document.getElementById('result').innerText = `Your BMI is ${bmi}- ${category}`;
+        });
+    </script>
+</body>
+</html>
