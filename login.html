@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon"> <!-- Favicon link -->
+  
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url(240_F_314840868_fP0nXXzKTVxYYBZEr1npZ8ccTMf7TgSz.jpg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+
+        h2 {
+            color: #19dd32;
+            border: 2px solid #19dd32; 
+            border-radius: 50px;
+            padding: 5px 20px; 
+            margin: 20px auto;
+            display: inline-block;
+            margin-right: 60px;
+            margin-left: 60px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+       
+        form input {
+    width: 100%; /* Add this line to make all input fields the same width */
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 16px;
+}
+
+        form input:focus {
+            outline: 2px solid #00ff88;
+        }
+
+        .forgot-password {
+            color: #19dd32;
+            text-align: right;
+            margin-bottom: 20px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            padding: 12px;
+            background-color: #19dd32;
+            border: none;
+            border-radius: 5px;
+            color: #121212;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #00cc66;
+        }
+
+        .sign-up-link {
+            color: #19dd32;
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        
+
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="flex-container">
+        <div class="container">
+            <img class="logo" src="Untitled_design-removebg-preview3.png" alt="Logo">
+            <h2 id="form-title">Login</h2>
+            <form id="authForm">
+                <div id="signupFields" style="display: none;">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="tel" id="phone" placeholder="Phone Number" required>
+                   
+                </div>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <a href="#" class="forgot-password" id="forgotPassword">Forgot Password?</a>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            <a href="#" class="sign-up-link" id="toggleAuth">Don't have an account? Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        const formTitle = document.getElementById('form-title');
+        const toggleAuthLink = document.getElementById('toggleAuth');
+        const authForm = document.getElementById('authForm');
+        const loginButton = document.querySelector('.login-btn');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const signupFields = document.getElementById('signupFields');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        let isLoginMode = true; // Toggle between login and signup mode
+
+        // Function to toggle between login and signup mode
+        toggleAuthLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isLoginMode) {
+                formTitle.textContent = 'Sign Up';
+                loginButton.textContent = 'Sign Up';
+                toggleAuthLink.textContent = 'Already have an account? Login';
+                signupFields.style.display = 'block'; // Show signup fields
+                emailInput.placeholder = "Email "; // Adjust placeholder
+            } else {
+                formTitle.textContent = 'Login';
+                loginButton.textContent = 'Login';
+                toggleAuthLink.textContent = "Don't have an account? Sign up";
+                signupFields.style.display = 'none'; // Hide signup fields
+                emailInput.placeholder = "Email"; // Reset placeholder
+            }
+            isLoginMode = !isLoginMode;
+        });
+
+        // Mock signup and login functionality
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (isLoginMode) {
+                // Handle login
+                const storedEmail = localStorage.getItem('email');
+                const storedPassword = localStorage.getItem('password');
+
+                if (email === storedEmail && password === storedPassword) {
+                    alert('Login successful!');
+                    // Redirect or show logged-in content
+                    window.location.href = "newland.html"; // Redirect to FitFusion page
+                    
+                } else {
+                    alert('Invalid email or password.');
+                }
+            } else {
+                // Handle signup
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+
+                // Validate password
+                const passwordValidation = /^(?=.*\d).{8,}$/; // At least 8 characters and 1 number
+                if (email && password && name && phone) {
+                    if (!passwordValidation.test(password)) {
+                        alert('Password must be at least 8 characters long and contain at least one number.');
+                        return;
+                    }
+                    localStorage.setItem('email', email);
+                    localStorage.setItem('password', password);
+                    localStorage.setItem('name', name);
+                    localStorage.setItem('phone', phone);
+                    alert('Signup successful! You can now log in.');
+                    formTitle.textContent = 'Login';
+                    loginButton.textContent = 'Login';
+                    toggleAuthLink.textContent = "Don't have an account? Sign up";
+                    isLoginMode = true;
+                    signupFields.style.display = 'none'; // Hide signup fields
+                    // Redirect to FitFusion page after signup
+                    window.location.href = "newland.html"; // Redirect to FitFusion page
+       
+                } else {
+                    alert('Please fill in all fields.');
+                }
+            }
+        });
+
+        // Handle forgot password
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = prompt('Enter your email:');
+            const storedEmail = localStorage.getItem('email');
+
+            if (email === storedEmail) {
+                const newPassword = prompt('Enter your new password:');
+                if (newPassword) {
+                    const passwordValidation = /^(?=.*\d).{8,}$/; // Validate new password
+                    if (!passwordValidation.test(newPassword)) {
+                        alert('Password must be at least 8 characters long and contain at least one number.');
+                    } else {
+                        localStorage.setItem('password', newPassword);
+                        alert('Your password has been reset successfully!');
+                    }
+                } else {
+                    alert('Password cannot be empty.');
+                }
+            } else {
+                alert('Email not found.');
+            }
+        });
+    </script>
+</body>
+</html>

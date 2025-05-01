@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFusion</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+
+    <style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.menu-bar {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 0 30px;
+            width: 100vw;
+            height: 80px;
+            /* position: fixed; */
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+
+
+        /* Logo styling */
+        .logo {
+            height: auto;
+            width: 90px;
+        }
+
+        /* Menu items styling */
+        .menu-items {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-items li {
+            list-style: none;
+            /* color: #19dd32; */
+            color:#19dd32
+            ;
+            font-family: sans-serif;
+            font-weight: bold;
+            padding: 12px 16px;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .menu-items li::before {
+            content: " ";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -1;
+            transition: .2s;
+            border-radius: 25px;
+        }
+
+        .menu-items li:hover::before {
+            background-color: white;
+            box-shadow: 0px 3px 20px 0px black;
+            transform: scale(1.2);
+        }
+
+        .menu-items li:hover {
+            color: black;
+        }
+
+        section {
+            padding: 100px 30px;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100vw;
+        }
+
+
+.d {
+    color: rgb(78, 192, 21);
+    font-size: 25px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-image: url(crossfit-workouts-for-beginners.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+
+}
+
+header {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    height: 200px;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: rgb(78, 192, 21);
+}
+
+#hero {
+   
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#hero h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#hero p {
+    font-size: 0.5em;
+    margin-bottom: 30px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.cta-button {
+    background: rgb(75, 200, 21);
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+   
+   
+
+}
+
+.cta-button:hover {
+    background:#333;
+}
+
+#features {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+#features h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: rgb(75, 200, 21);
+}
+
+.feature {
+    background: black;
+    color: rgb(75, 200, 21);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 40px;
+    display: inline-block;
+    width: calc(33.333% - 40px); /* Responsive width with spacing */
+    min-width: 250px;
+    transition: 0.2s;
+}
+
+.feature:hover{
+    
+    background-color: #333;
+            /* box-shadow: 0px 3px 20px 0px white; */
+            transform: scale(1.2);
+}
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1024px) {
+    .feature {
+        width: calc(50% - 40px); /* Two features in a row */
+    }
+
+    #hero h2 {
+        font-size: 2em;
+    }
+
+    #hero p {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 768px) {
+    .feature {
+        width: calc(100% - 40px); /* Stack features on smaller screens */
+        margin: 10px 0; /* Adjust margin for stacking */
+    }
+
+    #hero h2 {
+        font-size: 1.8em;
+    }
+
+    #hero p {
+        font-size: 1em;
+    }
+}
+
+
+.about-us {
+            background-color: white;
+        }
+
+     .about-content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px; /* Limit the max width */
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.about-text {
+    flex: 1;
+    text-align: left;
+    margin-top: 40px;
+    width: 50px;
+    padding-right: 60px; /* Space between text and image */
+    font-family: sans-serif;
+    
+}
+.about-image {
+    flex: 1;
+    text-align: right;
+    margin-top: 90px;
+   
+}
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px; /* Optional: Add some border radius */
+}
+
+.features {
+    padding: 50px;
+    background-color: #f9f9f9;
+}
+
+.features-content {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centering content */
+    gap: 40px; /* Space between image and text */
+}
+
+.features-text {
+    max-width: 45%;
+    text-align: left; /* Aligning text to the left */
+}
+
+.features-text h1 {
+    font-size: 40px; /* Larger font size for title */
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.features-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.features-list li {
+    font-size: 20px; /* Increased font size for list */
+    color: #555;
+    margin-bottom: 15px; /* Added more space between items */
+    padding-left: 30px;
+    position: relative;
+}
+
+.features-list li::before {
+    content: "✔"; /* Checkmark icon for each feature */
+    color: #28a745;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.community {
+            background-color: #e0f7fa;
+        }
+
+       
+        /* Contact Us section */
+        .contact-us {
+            background-color: #ffcc80;
+            padding: 200px;
+        }
+
+        /* General text styling */
+        h2 {
+            font-family: sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-family: sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .menu-items a {
+    color: #19dd32; /* Change this to your desired color */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Make text bold */
+    padding: 12px 16px;
+}
+
+.menu-items a:hover {
+    color: black; /* Hover color */
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="menu-bar">
+        <!-- Logo -->
+        <img src="Untitled_design-removebg-preview3.png" alt="Logo" class="logo">
+
+        <!-- Navigation menu items -->
+        <ul class="menu-items">
+           
+           
+            <li><a href="newlog.html">LOGIN </a></li>
+             <li> <a href="about_us.html">ABOUT US</a></li>
+            <li> <a href="#features">FEATURES </a></li>
+            <li><a href="contact_us.html">CONTACT US</a></li>
+            
+        </ul>
+    </div>
+   
+
+    <section id="hero">
+        <h2 style="margin-top: 200px;">Your Fitness Journey Starts Here</h2>
+        <p style="font-size: 30px;">Track your workouts, monitor your progress, and achieve your goals!</p>
+        <a href="newlog.html" class="cta-button">Get Started</a>
+    </section>
+	
+    <section id="features">
+		
+        <h2>Features</h2> 
+        <div class="feature">
+            <h3>Activity Tracking</h3>
+            <p>Monitor your daily activities and stay motivated.</p>
+        </div>
+        <div class="feature">
+            <h3>Progress Analytics</h3>
+            <p>Visualize your progress with insightful graphs.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>Meditation</h3>
+            <p>Dive into the realm of Guided Meditation</p>
+        </div>
+
+
+    </section>
+
+    
+    <footer class="simple-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 FitFusion. All rights reserved.</p>
+            <p>Chitkara University, Punjab</p>
+            <p>Email: support@fitfusion.com | Phone: +91-6284027224</p>
+        </div>
+    </footer>
