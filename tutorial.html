@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout List</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon"> <!-- Favicon link -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.pexels.com/photos/18060190/pexels-photo-18060190/free-photo-of-topless-man-exercising-at-gym.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1); /* Light overlay for text contrast */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .filter input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            width: 50%;
+            max-width: 200px;
+            background-color: rgba(255, 255, 255);
+            color: #000000;
+        }
+
+        /* Flex container for workout cards */
+        .workout-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .workout-card {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s;
+            flex: 1 1 300px;
+        }
+
+        .workout-card:hover {
+            transform: scale(1.02);
+        }
+
+        .workout-title {
+            font-size: 22px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .workout-info {
+            display: flex;
+            justify-content: space-between;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .workout-container {
+                flex-direction: column;
+            }
+
+            .workout-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .workout-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <br>
+        <h1>WORKOUT TUTORIALS</h1>
+
+        <!-- Filter Input -->
+        <div class="filter">
+            <input type="number" id="setFilter" placeholder="Minimum Sets" min="1">
+        </div>
+
+        <!-- Workout Cards in a Flex Container -->
+        <div class="workout-container">
+            <div class="workout-card" data-sets="3">
+                <div class="workout-title">Push-Ups</div>
+                <div class="workout-info">
+                    <div>Sets: 3</div>
+                    <div>Time: 30 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/0pkjOk0EiAk" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="workout-card" data-sets="4">
+                <div class="workout-title">Squats</div>
+                <div class="workout-info">
+                    <div>Sets: 4</div>
+                    <div>Time: 45 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/aclHkVaku9U" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="workout-card" data-sets="2">
+                <div class="workout-title">Plank</div>
+                <div class="workout-info">
+                    <div>Sets: 2</div>
+                    <div>Time: 60 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/pSHjTRCQxIw" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="workout-card" data-sets="3">
+                <div class="workout-title">Lunges</div>
+                <div class="workout-info">
+                    <div>Sets: 3</div>
+                    <div>Time: 45 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/QOVaHwm-Q6U" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="workout-card" data-sets="5">
+                <div class="workout-title">Burpees</div>
+                <div class="workout-info">
+                    <div>Sets: 5</div>
+                    <div>Time: 30 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/tJrdJBWBu08" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="workout-card" data-sets="3">
+                <div class="workout-title">Bicep Curls</div>
+                <div class="workout-info">
+                    <div>Sets: 3</div>
+                    <div>Time: 20 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="workout-card" data-sets="4">
+                <div class="workout-title">Mountain Climbers</div>
+                <div class="workout-info">
+                    <div>Sets: 4</div>
+                    <div>Time: 30 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/cnyTQDSE884"  allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <div class="workout-card" data-sets="5">
+                <div class="workout-title">Jumping Jacks</div>
+                <div class="workout-info">
+                    <div>Sets: 5</div>
+                    <div>Time: 45 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/iSSAk4XCsRA" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <div class="workout-card" data-sets="6">
+                <div class="workout-title">Leg Raises</div>
+                <div class="workout-info">
+                    <div>Sets: 6</div>
+                    <div>Time: 40 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/qvi8aM02_GY" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <div class="workout-card" data-sets="7">
+                <div class="workout-title">Tricep Dips</div>
+                <div class="workout-info">
+                    <div>Sets: 7</div>
+                    <div>Time: 35 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/JhX1nBnirNw" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="workout-card" data-sets="9">
+                <div class="workout-title">High Knees</div>
+                <div class="workout-info">
+                    <div>Sets: 9</div>
+                    <div>Time: 30 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/FvjmPRU3zn4" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="workout-card" data-sets="9">
+                <div class="workout-title">Box Jumps</div>
+                <div class="workout-info">
+                    <div>Sets: 9</div>
+                    <div>Time: 30 seconds</div>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/NBY9-kTuHEk" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the filter input and workout cards
+        const setFilterInput = document.getElementById('setFilter');
+        const workoutCards = document.querySelectorAll('.workout-card');
+
+        // Filter function
+        function filterWorkouts() {
+            const minSets = parseInt(setFilterInput.value, 10) || 0;
+
+            workoutCards.forEach(card => {
+                const sets = parseInt(card.getAttribute('data-sets'), 10);
+                if (sets >= minSets) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listener to filter input
+        setFilterInput.addEventListener('input', filterWorkouts);
+    </script>
+
+</body>
+</html>

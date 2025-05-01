@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Meditation Timer</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #000428, #004e92);
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: background 2s ease;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            z-index: 100;
+            transition: all 0.5s;
+        }
+        
+        .clock {
+            font-size: 4rem;
+            margin: 2rem;
+            color: white;
+            text-shadow: 0 0 15px #00ffff;
+            z-index: 100;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .control-panel {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem;
+            z-index: 100;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            background: rgba(0,150,255,0.3);
+            border: 1px solid rgba(0,200,255,0.5);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(0,200,255,0.3);
+        }
+        
+        button:hover {
+            background: rgba(0,200,255,0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0,200,255,0.5);
+        }
+        
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+            z-index: 100;
+            max-width: 500px;
+        }
+        
+        /* Visual Elements */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: inset 0 0 50px rgba(255,255,255,0.2),
+                        0 0 50px rgba(255,255,255,0.1);
+        }
+        
+        .mantra-bubble {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 0 0 5px rgba(0,255,255,0.7);
+            z-index: 90;
+            animation: floatUp 12s linear forwards;
+            pointer-events: none;
+            max-width: 150px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,200,255,0.3);
+            line-height: 1.3;
+            word-break: break-word;
+            white-space: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .left-mantra {
+            left: 5%;
+        }
+        
+        .right-mantra {
+            right: 5%;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        .settings-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 1.5rem;
+            border-radius: 15px;
+            z-index: 200;
+            display: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,200,255,0.3);
+            box-shadow: 0 0 30px rgba(0,200,255,0.2);
+            width: 300px;
+        }
+        
+        .progress-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+        
+        .progress-ring-circle {
+            stroke: rgba(0, 255, 255, 0.3);
+            transition: stroke-dashoffset 1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .settings-panel label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #00ffff;
+        }
+        
+        .settings-panel select, .settings-panel input {
+            width: 100%;
+            padding: 8px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,200,255,0.3);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-panel" id="settingsPanel">
+        <h3>⚙️ Meditation Settings</h3>
+        <div>
+            <label for="musicSelect">Music Theme:</label>
+            <select id="musicSelect">
+                <option value="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">Cosmic Harmony</option>
+                <option value="https://www.bensound.com/bensound-music/bensound-deepblue.mp3">Deep Ocean</option>
+                <option value="https://www.bensound.com/bensound-music/bensound-ascending.mp3">Celestial Ascension</option>
+                <option value="https://www.bensound.com/bensound-music/bensound-love.mp3">Tranquil Love</option>
+                <option value="https://www.bensound.com/bensound-music/bensound-relaxing.mp3">Peaceful Mind</option>
+            </select>
+        </div>
+        <div>
+            <label for="bgSelect">Visual Theme:</label>
+            <select id="bgSelect">
+                <option value="cosmic">Cosmic Journey</option>
+                <option value="forest">Enchanted Forest</option>
+                <option value="ocean">Deep Ocean</option>
+                <option value="mountain">Mountain Sunrise</option>
+            </select>
+        </div>
+        <button onclick="applySettings()">Apply Settings</button>
+    </div>
+
+    <h1 id="title">Cosmic Meditation</h1>
+    <div class="clock" id="clock">00:00:00</div>
+    
+    <svg class="progress-ring" width="300" height="300" id="progressRing">
+        <circle class="progress-ring-circle" stroke-width="4" fill="transparent" r="140" cx="150" cy="150"/>
+    </svg>
+
+    <div class="control-panel">
+        <button onclick="pauseTimer()" id="pauseBtn">⏸️ Pause</button>
+        <button onclick="restartTimer()">🔄 Restart</button>
+        <button onclick="toggleSettings()">⚙️ Settings</button>
+    </div>
+
+    <div class="presets">
+        <button onclick="startTimer(1)">1 Minute</button>
+        <button onclick="startTimer(3)">3 Minutes</button>
+        <button onclick="startTimer(5)">5 Minutes</button>
+        <button onclick="startTimer(10)">10 Minutes</button>
+        <button onclick="startTimer(15)">15 Minutes</button>
+        <button onclick="startTimer(20)">20 Minutes</button>
+        <button onclick="startTimer(30)">30 Minutes</button>
+        <button onclick="setCustomTime()">⏱️ Custom</button>
+    </div>
+
+    <audio id="meditationMusic"></audio>
+    <audio id="bellSound" src="https://assets.mixkit.co/sfx/preview/mixkit-meditation-bell-1743.mp3"></audio>
+
+    <script>
+        // Global variables
+        let countdown;
+        let remainingTime = 0;
+        let isPaused = false;
+        let initialTime = 0;
+        const clock = document.getElementById('clock');
+        const meditationMusic = document.getElementById('meditationMusic');
+        const bellSound = document.getElementById('bellSound');
+        const progressRing = document.querySelector('.progress-ring-circle');
+        const title = document.getElementById('title');
+        let visualEffects = [];
+        let mantraInterval;
+        let activeMantras = [];
+        
+        const mantras = [
+        "I am present in this moment",
+            "With each breath, I grow calmer",
+            "My mind is still like a quiet lake",
+            "I release all that does not serve me",
+            "I am grounded and centered",
+            "Peace begins with me",
+            "I am one with the universe",
+            "This moment is perfect as it is",
+            "I welcome stillness into my being",
+            "I am a vessel of calm and tranquility",
+            "Breathe in peace", 
+            "Breathe out tension",
+            "I am present",
+            "I am calm",
+            "Mind still",
+            "Release",
+            "I am peace",
+            "One with all",
+            "This moment",
+            "Stillness",
+            "Be here now",
+            "Let go",
+            "Find center",
+            "All is well",
+            "Peace within",
+            "Breathe deeply",
+            "Stay present",
+            "I am enough",
+            "Calm mind",
+            "Peaceful heart"
+        ];
+
+        // Initialize
+        createStars(150);
+        createPlanets();
+        setMusicSource();
+        
+        // Format time as HH:MM:SS
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Create starfield background
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.opacity = Math.random();
+                star.style.setProperty('--duration', `${Math.random() * 5 + 3}s`);
+                document.body.appendChild(star);
+                visualEffects.push(star);
+            }
+        }
+        
+        // Create planets
+        function createPlanets() {
+            const planets = [
+                { size: 80, color: 'rgba(255,100,100,0.1)', top: '20%', left: '15%' },
+                { size: 120, color: 'rgba(100,255,100,0.1)', top: '70%', left: '80%' },
+                { size: 60, color: 'rgba(100,100,255,0.1)', top: '30%', left: '75%' }
+            ];
+            
+            planets.forEach(planet => {
+                const el = document.createElement('div');
+                el.className = 'planet';
+                el.style.width = `${planet.size}px`;
+                el.style.height = `${planet.size}px`;
+                el.style.top = planet.top;
+                el.style.left = planet.left;
+                el.style.background = planet.color;
+                document.body.appendChild(el);
+                visualEffects.push(el);
+            });
+        }
+        
+        // Create floating mantra bubbles
+        function createMantraBubble() {
+            if (isPaused || !remainingTime) return;
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'mantra-bubble';
+            bubble.textContent = mantras[Math.floor(Math.random() * mantras.length)];
+            
+            // Alternate between left and right sides
+            const sideClass = Math.random() > 0.5 ? 'left-mantra' : 'right-mantra';
+            bubble.classList.add(sideClass);
+            
+            // Random vertical starting position (bottom 20% of screen)
+            const startY = 80 + Math.random() * 20;
+            bubble.style.bottom = `${startY}%`;
+            
+            // Random size variation
+            const size = 0.8 + Math.random() * 0.4;
+            bubble.style.transform = `scale(${size})`;
+            
+            document.body.appendChild(bubble);
+            activeMantras.push(bubble);
+            
+            // Remove bubble after animation completes
+            setTimeout(() => {
+                bubble.remove();
+                activeMantras = activeMantras.filter(m => m !== bubble);
+            }, 12000);
+        }
+        
+        // Start continuous mantra flow
+        function startMantraFlow() {
+            if (mantraInterval) clearInterval(mantraInterval);
+            
+            // Create first bubble immediately
+            createMantraBubble();
+            
+            // Then continue creating them every 2-4 seconds
+            mantraInterval = setInterval(() => {
+                if (activeMantras.length < 5) { // Limit number of simultaneous mantras
+                    createMantraBubble();
+                }
+            }, 2000 + Math.random() * 2000);
+        }
+        
+        // Stop mantra flow
+        function stopMantraFlow() {
+            if (mantraInterval) {
+                clearInterval(mantraInterval);
+                mantraInterval = null;
+            }
+            // Clear existing mantras
+            activeMantras.forEach(bubble => bubble.remove());
+            activeMantras = [];
+        }
+        
+        // Update progress ring
+        function updateProgressRing() {
+            const circumference = 2 * Math.PI * 140;
+            const offset = circumference - (remainingTime / initialTime) * circumference;
+            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+            progressRing.style.strokeDashoffset = offset;
+        }
+        
+        // Start timer
+        function startTimer(minutes) {
+            clearVisualEffects();
+            initialTime = minutes * 60;
+            remainingTime = initialTime;
+            clearInterval(countdown);
+            
+            // Set up visual effects
+            createStars(100);
+            createPlanets();
+            
+            // Start music and mantra flow
+            meditationMusic.play().catch(e => {
+                console.error("Error playing meditation music:", e);
+            });
+            
+            // Start mantra flow when music plays
+            meditationMusic.addEventListener('play', startMantraFlow, { once: true });
+            
+            countdown = setInterval(updateClock, 1000);
+            updateProgressRing();
+            
+            // Change title during session
+            const titles = ["Cosmic Journey", "Inner Peace", "Mindful Moments", "Serene Space", "Zen Garden"];
+            title.textContent = titles[Math.floor(Math.random() * titles.length)];
+        }
+        
+        // Update clock
+        function updateClock() {
+            if (remainingTime > 0 && !isPaused) {
+                clock.textContent = formatTime(remainingTime);
+                remainingTime--;
+                updateProgressRing();
+                
+                // Pulsing effect as time counts down
+                if (remainingTime % 10 === 0) {
+                    clock.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        clock.style.transform = 'scale(1)';
+                    }, 300);
+                }
+                
+                // Play bell at intervals
+                if (remainingTime === Math.floor(initialTime/2)) {
+                    bellSound.play();
+                }
+            } else if (remainingTime <= 0) {
+                sessionComplete();
+            }
+        }
+        
+        // Session complete
+        function sessionComplete() {
+            clearInterval(countdown);
+            stopMantraFlow();
+            meditationMusic.pause();
+            meditationMusic.currentTime = 0;
+            clearVisualEffects();
+            
+            // Celebration effect
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 100);
+            }
+            
+            // Play completion bell
+            bellSound.play();
+            
+            // Show completion message
+            setTimeout(() => {
+                alert("Meditation session complete! 🙏");
+            }, 1000);
+            
+            title.textContent = "Cosmic Meditation";
+        }
+        
+        // Create firework effect
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.style.position = 'absolute';
+            firework.style.width = '5px';
+            firework.style.height = '5px';
+            firework.style.borderRadius = '50%';
+            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            firework.style.left = `${Math.random() * 100}vw`;
+            firework.style.top = `${Math.random() * 100}vh`;
+            firework.style.boxShadow = `0 0 10px 2px hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(firework);
+            
+            // Animate firework
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 100 + 50;
+            const duration = Math.random() * 1000 + 500;
+            
+            firework.style.transition = `all ${duration}ms ease-out`;
+            
+            setTimeout(() => {
+                firework.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                firework.style.opacity = '0';
+            }, 10);
+            
+            // Remove firework
+            setTimeout(() => {
+                firework.remove();
+            }, duration + 10);
+        }
+        
+        // Pause timer
+        function pauseTimer() {
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            
+            if (isPaused) {
+                meditationMusic.pause();
+                stopMantraFlow();
+                pauseBtn.textContent = '▶️ Resume';
+                title.textContent = "Paused";
+            } else {
+                meditationMusic.play();
+                startMantraFlow();
+                pauseBtn.textContent = '⏸️ Pause';
+                const titles = ["Cosmic Journey", "Inner Peace", "Mindful Moments", "Serene Space"];
+                title.textContent = titles[Math.floor(Math.random() * titles.length)];
+            }
+        }
+        
+        // Restart timer
+        function restartTimer() {
+            clearInterval(countdown);
+            stopMantraFlow();
+            remainingTime = initialTime;
+            clock.textContent = formatTime(remainingTime);
+            isPaused = false;
+            document.getElementById('pauseBtn').textContent = '⏸️ Pause';
+            meditationMusic.currentTime = 0;
+            meditationMusic.play();
+            clearVisualEffects();
+            createStars(100);
+            createPlanets();
+            updateProgressRing();
+            countdown = setInterval(updateClock, 1000);
+            startMantraFlow();
+        }
+        
+        // Custom time
+        function setCustomTime() {
+            const minutes = parseInt(prompt("Enter meditation duration in minutes (1-120):", "10"), 10);
+            if (!isNaN(minutes) && minutes > 0 && minutes <= 120) {
+                startTimer(minutes);
+            } else {
+                alert("Please enter a number between 1 and 120");
+            }
+        }
+        
+        // Clear visual effects
+        function clearVisualEffects() {
+            visualEffects.forEach(el => {
+                if (el.parentNode) {
+                    el.parentNode.removeChild(el);
+                }
+            });
+            visualEffects = [];
+        }
+        
+        // Toggle settings panel
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        // Set music source
+        function setMusicSource() {
+            const musicSelect = document.getElementById('musicSelect');
+            meditationMusic.src = musicSelect.value;
+        }
+        
+        // Apply settings
+        function applySettings() {
+            setMusicSource();
+            const bgSelect = document.getElementById('bgSelect');
+            
+            switch(bgSelect.value) {
+                case 'forest':
+                    document.body.style.background = 'linear-gradient(to bottom, #1a2a3a, #2d5a3d)';
+                    break;
+                case 'ocean':
+                    document.body.style.background = 'linear-gradient(to bottom, #000428, #004e92)';
+                    break;
+                case 'mountain':
+                    document.body.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
+                    break;
+                default:
+                    document.body.style.background = 'linear-gradient(to bottom, #000000, #1a1a2e)';
+            }
+            
+            toggleSettings();
+        }
+
+        // Enable audio on first user interaction
+        document.body.addEventListener('click', function enableAudio() {
+            // Create and play an empty audio buffer to unlock audio
+            const emptyBuffer = new AudioContext();
+            emptyBuffer.resume();
+            
+            // Remove this event listener after first interaction
+            document.body.removeEventListener('click', enableAudio);
+        }, { once: true });
+    </script>
+</body>
+</html>
