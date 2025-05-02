@@ -68,7 +68,7 @@ main {
     flex: 1;
     text-align: justify;
     padding: 20px;
-    color: #fff; /* Maintain contrast against the black background */
+    color: #fff; 
 }
 
 .details h3 {
