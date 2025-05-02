@@ -116,7 +116,7 @@ footer:hover {
     background: rgba(0, 0, 0, 0.85);
 }
 
-/* Keyframes for Animations */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
