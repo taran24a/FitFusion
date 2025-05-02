@@ -76,7 +76,7 @@ const exercises = {
     ]
   };
   
-  // Function to render exercises dynamically
+
   function renderExercises() {
     const exerciseList = document.getElementById("exercise-list");
   
