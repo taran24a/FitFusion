@@ -72,7 +72,7 @@ main {
 }
 
 .details h3 {
-    color: #87e2d5; /* Bright color for headings */
+    color: #87e2d5; 
     margin-top: 0;
     transition: color 0.3s ease;
 }
