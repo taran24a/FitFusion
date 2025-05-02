@@ -95,7 +95,7 @@ main {
 
 /* Styling for Completed Exercises */
 .exercise.completed {
-    background: rgba(26, 94, 86, 0.8); /* Slightly brighter for completed */
+    background: rgba(26, 94, 86, 0.8); 
     border-color: #87e2d5;
     animation: fadeIn 0.5s ease-in-out;
 }
